@@ -1,8 +1,4 @@
 import os
-
-"""
-	Esta clase sirve para guardar el importe de un dia concreto dentro del mesArray,
-	donde indica el valor que dispones y si ese es por defecto o modicifaco manualmente
 """
 class Mes:
 	def __init__(self, dias, saldoTotal):
@@ -12,9 +8,13 @@ class Mes:
 		self.saldoTotal = saldoTotal
 	def setDias(self, dias):
 		self.dias = dias
+"""
+"""
+	Esta clase sirve para guardar el importe de un dia concreto dentro del mesArray,
+	donde indica el valor que dispones y si ese es por defecto o modicifaco manualmente
+"""
 
-
-class Dia:
+class Mes:
 	def __init__(self, saldo, modificado):
 		self.saldo = saldo
 		self.modificado = modificado
@@ -56,43 +56,42 @@ def setDineroDiarioDefault(dinero, diasMes):
 	dias = []
 
 	for i in range(diasMes):
-		dias.append(Dia(saldoDiario, False))
+		dias.append(Mes(saldoDiario, False))
 	
-	Mes( dias, dinero)
 
-	return Mes
+	return dias
 
 """
 	Dado mes, dia, importe, dinero del que se dispone en ese Mes
 	modifica el importe de ese dia en concreto y recalcula el valor
 	de los dias que no se modificaron
 """
-def cambiarImporte(Mes, dia, importe, dineroTotal):
-	Mes.dias[dia].saldo = importe
-	Mes.dias[dia].modificado = True
+def cambiarImporte(mes, dia, importe, dineroTotal):
+	mes[dias].saldo = importe
+	mes[dia].modificado = True
 	count = 0
 	for i in range(len(mes)):
-		if Mes.dias[i].modificado == True:
+		if mes[i].modificado == True:
 			dineroTotal -= mes[i].saldo
 			count += 1
 
 	saldoDiario = dineroTotal/(len(mes)-count)
 	for i in range(len(mes)):
-		if Mes.dias[i].modificado == False:
-			Mes.dias[i].saldo = saldoDiario
+		if mes[i].modificado == False:
+			mes[i].saldo = saldoDiario
 
-	return Mes
+	return mes
 
 ## Dado el Mes nos imprime los valores en forma de calendario
-def printCalendar(Mes):
+def printCalendar(mes):
 	print('')
 	print('')
 	print('    L    |      M    |      X    |      J    |      V    |      S    |      D')
-	for i in range(len(Mes.dias)):
+	for i in range(len(mes)):
 		if i < 9:
 			print(' ',end='')
 
-		saldo = str(round(Mes.dias[i].saldo,2))
+		saldo = str(round(mes[i].saldo,2))
 		while len(saldo) < 5:
 			saldo = "0"+saldo
 		print(str(i+1)+': '+str(saldo)+'|  ', end='')
@@ -104,9 +103,9 @@ def printCalendar(Mes):
 	print('')
 
 ## Dado mes, año y Mes, nos guarda en .txt los datos e.g. 2018Enero.txt
-def guardarMes(mesString, anoString, Mes):
+def guardarMes(mesString, anoString, mes):
 	file = open( anoString+mesString+".txt", "w")
-	for dia in Mes.dias:
+	for dia in mes:
 		file.write(str(dia.saldo)+",")
 		file.write(str(dia.modificado))
 		file.write("\n")
@@ -122,8 +121,8 @@ def getMes(mesString, anoString):
 		line = line.split(",")
 		dias.append(Dia( float(line[0]) , bool(line[1].replace("\n","")) ) )
 
-	Mes(dias,0)
-	return Mes
+	
+	return dias
 
 
 
