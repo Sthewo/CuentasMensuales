@@ -16,9 +16,11 @@ class Dia:
 class Mes:
 	dias = [Dia(0,False)]
 	saldoTotal = 0
-	def __init__(self, dias, saldoTotal):
+	mesString = ""
+	def __init__(self, dias = [Dia(0,False)], saldoTotal = 0, mesString = ""):
 		self.dias = dias
 		self.saldoTotal = saldoTotal
+		self.mesString = mesString
 	
 
 ## Establece el mes y comprueba que se ha introducido un mes valido
@@ -64,13 +66,15 @@ def setDineroDiarioDefault(dinero, diasMes):
 	modifica el importe de ese dia en concreto y recalcula el valor
 	de los dias que no se modificaron
 """
-def cambiarImporte(MES, dia, importe, dineroTotal):
+def cambiarImporte(MES, dia, importe):
+	dia = dia - 1
 	MES.dias[dia].saldo = importe
 	MES.dias[dia].modificado = True
 	count = 0
+	dineroTotal = MES.saldoTotal
 	for i in range(len(MES.dias)):
 		if MES.dias[i].modificado == True:
-			dineroTotal -= mes[i].saldo
+			dineroTotal -= MES.dias[i].saldo
 			count += 1
 
 	saldoDiario = dineroTotal/(len(MES.dias)-count)
@@ -78,11 +82,13 @@ def cambiarImporte(MES, dia, importe, dineroTotal):
 		if MES.dias[i].modificado == False:
 			MES.dias[i].saldo = saldoDiario
 
-	return mes
+	return MES
 
 ## Dado el Mes nos imprime los valores en forma de calendario
 def printCalendar(MES):
 	print('')
+	print('')
+	print('Month: '+MES.mesString)
 	print('')
 	print('    L    |      M    |      X    |      J    |      V    |      S    |      D')
 	for i in range(len(MES.dias)):
@@ -91,18 +97,22 @@ def printCalendar(MES):
 
 		saldo = str(round(MES.dias[i].saldo,2))
 		while len(saldo) < 5:
-			saldo = "0"+saldo
+			saldo = " "+saldo
 		print(str(i+1)+': '+str(saldo)+'|  ', end='')
 		if i%7==6:
 			print('')
 			print('---------|-----------|-----------|-----------|-----------|-----------|-----------|')
 	print('')
 	print('')
+	print("Total amount: "+str(MES.saldoTotal))
+	print('')
 	print('')
 
 ## Dado mes, año y Mes, nos guarda en .txt los datos e.g. 2018Enero.txt
 def guardarMes(mesString, anoString, MES):
 	file = open( anoString+mesString+".txt", "w")
+	file.write(str(MES.saldoTotal))
+	file.write("\n")
 	for dia in MES.dias:
 		file.write(str(dia.saldo)+",")
 		file.write(str(dia.modificado))
@@ -114,18 +124,29 @@ def getMes(mesString, anoString):
 	file = open( anoString+mesString+".txt", "r")
 	lines = file.readlines()
 	dias = []
-
+	count = 0
 	for line in lines:
-		line = line.split(",")
-		dias.append(Dia( float(line[0]) , bool(line[1].replace("\n","")) ) )
+		if count == 0:
+			saldoTotal = int(line.replace("\n",""))
+		else:	
+			line = line.split(",")
+			modificado = False
+			if line[1].replace("\n","") == "True":
+				modificado = True
 
-	MES = Mes(dias, 0)
+			dias.append(Dia( float(line[0]) , modificado ) )
+		count += 1
+
+
+	file.close()	
+	MES = Mes(dias, saldoTotal)
 	return MES
 
 
 
 
 keep = True
+MES = Mes()
 print("Hi there! Welcome to your personal economy assistant.")
 
 while keep == True:
@@ -145,12 +166,28 @@ while keep == True:
 		if respuesta.upper() == "Y":
 			dineroMensual = setDinero()
 			MES = setDineroDiarioDefault(dineroMensual, getDiasMes(mesString))
+			MES.mesString = mesString
 			printCalendar(MES)
+			guardarMes(mesString,anoString, MES)
 		elif respuesta.upper() == "N":
 			MES = getMes(mesString,anoString)
+			MES.mesString = mesString
 			printCalendar(MES)
+		keep1 = True
+		while keep1 == True:
+			print("1. Modify a day amount")
+			print("2. Exit")
+			choose1 = int(input(""))
+			if choose1 == 1:
+				dia = int(input("Which day you want to modify: "))
+				importe = int(input("How much you go to spend: "))
+				cambiarImporte(MES, dia, importe)
+				printCalendar(MES)
+				guardarMes(mesString,anoString,MES)
+			elif choose1 == 2:
+				keep1 = False
 
-	if choose == 2:
+	elif choose == 2:
 		keep = False
 	
 
