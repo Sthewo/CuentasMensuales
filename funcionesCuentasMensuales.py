@@ -87,31 +87,8 @@ def cambiarImporte(MES, dia, importe):
 
 	return MES
 
-## Dado el Mes nos imprime los valores en forma de calendario
-def printCalendar(MES):
-	print('')
-	print('')
-	print('Month: '+MES.mesString)
-	print('')
-	print('    L    |      M    |      X    |      J    |      V    |      S    |      D')
-	for i in range(len(MES.dias)):
-		if i < 9:
-			print(' ',end='')
 
-		saldo = str(round(MES.dias[i].saldo,2))
-		while len(saldo) < 5:
-			saldo = " "+saldo
-		print(str(i+1)+': '+str(saldo)+'|  ', end='')
-		if i%7==6:
-			print('')
-			print('---------|-----------|-----------|-----------|-----------|-----------|-----------|')
-	print('')
-	print('')
-	print("Total amount: "+str(MES.saldoTotal))
-	print('')
-	print('')
-
-def printCalendarVentana(frame, MES):
+def printCalendar(frame, MES):
 	height = int(len(MES.dias)/7) + (len(MES.dias)/7 > 0)
 	width = 7
 	for i in range(height): #Rows
@@ -121,11 +98,6 @@ def printCalendarVentana(frame, MES):
 			b = Label(frame, text=str(i*7+j+1)+":  "+str(round(MES.dias[i*7+j].saldo,2)))
 			b.grid(row = i, column = j)
 			j = j + 1
-
-	
-	
-
-	
 
 
 ## Dado mes, año y Mes, nos guarda en .txt los datos e.g. 2018Enero.txt
@@ -164,7 +136,7 @@ def getMes(mesString, anoString):
 
 
 
-
+"""
 keep = True
 MES = Mes()
 print("Hi there! Welcome to your personal economy assistant.")
@@ -212,7 +184,7 @@ while keep == True:
 
 	elif choose == 2:
 		keep = False
-
+"""
 	
 
 

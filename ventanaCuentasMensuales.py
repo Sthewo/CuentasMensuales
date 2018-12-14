@@ -7,16 +7,21 @@ def borrarTabla():
   list = gridFrame.grid_slaves()
   for l in list:
     l.destroy()
-    
+
 def onClickAceptar():
-	borrarTabla()
 	dia = int(Entry.get(entryDia))
 	importe = int(Entry.get(entryImporte))
+	entryDia.delete(0, 'end')
+	entryImporte.delete(0, 'end')
+	borrarTabla()
 
 	cambiarImporte(MES, dia, importe)
 	guardarMes("Enero","2019",MES)
-	printCalendarVentana(gridFrame,MES)
-	
+	printCalendar(gridFrame,MES)
+
+def borrarCampos():
+	entryDia.delete(0, 'end')
+	entryImporte.delete(0, 'end')
 
 root = Tk()
 
@@ -36,17 +41,8 @@ botFrame3 = Frame(root)
 botFrame3.pack(fill = X,pady=(5,5))
 
 
-printCalendarVentana(gridFrame,MES)
-"""
-height = 5
-width = 7
-for i in range(height): #Rows
-	j = 0
-	while j < 7: #Columns
-		b = Label(gridFrame, text=str(i)+":"+str(j))
-		b.grid(row=i,column=j)
-		j = j + 1
-"""
+printCalendar(gridFrame,MES)
+
 
 labelStringMes 			= Label(topFrame, text="Mes: Enero")
 labelDineroTotal 		= Label(botFrame1, text="Dinero: 1500")
@@ -54,7 +50,7 @@ labelCambiarImporte = Label(botFrame1, text="Cambiar Importe", anchor=W)
 entryDia 						= Entry(botFrame2)
 entryImporte 				= Entry(botFrame2)
 buttonAceptar 			= Button(botFrame3, command=onClickAceptar, text="Cambiar")
-buttonCancelar 			= Button(botFrame3, text="Cancelar")
+buttonCancelar 			= Button(botFrame3, command=borrarCampos, text="Cancelar")
 
 labelStringMes.pack(side = TOP, fill = X, anchor = W)
 labelDineroTotal.pack(side = TOP, fill = X,)
