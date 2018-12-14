@@ -1,5 +1,8 @@
 import os
+from tkinter import *
 
+root = Tk()
+root.geometry("500x500")
 
 """
 	Esta clase sirve para guardar el importe de un dia concreto dentro del mesArray,
@@ -108,6 +111,23 @@ def printCalendar(MES):
 	print('')
 	print('')
 
+def printCalendarVentana(frame, MES):
+	height = int(len(MES.dias)/7) + (len(MES.dias)/7 > 0)
+	width = 7
+	for i in range(height): #Rows
+		j = 0
+		while i*7+j < len(MES.dias) and j < 7: #Columns
+			count = i*7+j
+			b = Label(frame, text=str(i*7+j+1)+":  "+str(round(MES.dias[i*7+j].saldo,2)))
+			b.grid(row = i, column = j)
+			j = j + 1
+
+	
+	
+
+	
+
+
 ## Dado mes, año y Mes, nos guarda en .txt los datos e.g. 2018Enero.txt
 def guardarMes(mesString, anoString, MES):
 	file = open( anoString+mesString+".txt", "w")
@@ -160,7 +180,7 @@ while keep == True:
 		if exist == True:
 			respuesta = ""
 		else:
-			respuesta = "N"
+			respuesta = "Y"
 		while respuesta.upper() != "Y" and respuesta.upper() != "N":
 			respuesta = input("That month already exist. Do you want overwrite it?(Y/N)")
 		if respuesta.upper() == "Y":
@@ -168,11 +188,13 @@ while keep == True:
 			MES = setDineroDiarioDefault(dineroMensual, getDiasMes(mesString))
 			MES.mesString = mesString
 			printCalendar(MES)
+			printCalendarVentana(MES)
 			guardarMes(mesString,anoString, MES)
 		elif respuesta.upper() == "N":
 			MES = getMes(mesString,anoString)
 			MES.mesString = mesString
 			printCalendar(MES)
+			printCalendarVentana(MES)
 		keep1 = True
 		while keep1 == True:
 			print("1. Modify a day amount")
@@ -183,12 +205,18 @@ while keep == True:
 				importe = int(input("How much you go to spend: "))
 				cambiarImporte(MES, dia, importe)
 				printCalendar(MES)
+				printCalendarVentana(MES)
 				guardarMes(mesString,anoString,MES)
 			elif choose1 == 2:
 				keep1 = False
 
 	elif choose == 2:
 		keep = False
+
 	
 
 
+	
+	
+
+	

@@ -1,4 +1,22 @@
 from tkinter import *
+from funcionesCuentasMensuales import *
+
+MES = getMes("Enero","2019")
+
+def borrarTabla():
+  list = gridFrame.grid_slaves()
+  for l in list:
+    l.destroy()
+    
+def onClickAceptar():
+	borrarTabla()
+	dia = int(Entry.get(entryDia))
+	importe = int(Entry.get(entryImporte))
+
+	cambiarImporte(MES, dia, importe)
+	guardarMes("Enero","2019",MES)
+	printCalendarVentana(gridFrame,MES)
+	
 
 root = Tk()
 
@@ -17,6 +35,9 @@ botFrame2.pack(fill = X)
 botFrame3 = Frame(root)
 botFrame3.pack(fill = X,pady=(5,5))
 
+
+printCalendarVentana(gridFrame,MES)
+"""
 height = 5
 width = 7
 for i in range(height): #Rows
@@ -25,13 +46,14 @@ for i in range(height): #Rows
 		b = Label(gridFrame, text=str(i)+":"+str(j))
 		b.grid(row=i,column=j)
 		j = j + 1
+"""
 
 labelStringMes 			= Label(topFrame, text="Mes: Enero")
 labelDineroTotal 		= Label(botFrame1, text="Dinero: 1500")
-labelCambiarImporte = Label(botFrame1, text="CambiarDinero", anchor=W)
+labelCambiarImporte = Label(botFrame1, text="Cambiar Importe", anchor=W)
 entryDia 						= Entry(botFrame2)
 entryImporte 				= Entry(botFrame2)
-buttonAceptar 			= Button(botFrame3, text="Aceptar")
+buttonAceptar 			= Button(botFrame3, command=onClickAceptar, text="Cambiar")
 buttonCancelar 			= Button(botFrame3, text="Cancelar")
 
 labelStringMes.pack(side = TOP, fill = X, anchor = W)
