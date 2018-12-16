@@ -1,4 +1,5 @@
 from tkinter import *
+
 from funcionesCuentasMensuales import *
 
 MES = getMes("Enero","2019")
@@ -27,9 +28,23 @@ def cargarMes():
 	loadFrame.pack_forget()
 	mesString = Entry.get(entryMes)
 	anoString = Entry.get(entryAno)
-	MES = getMes(mesString, anoString)
+	exist = os.path.isfile('./'+anoString+mesString+'.txt')
+	if exist == True:
+		MES = getMes(mesString, anoString)
+		window = tkinter.Toplevel(root)
+		monthFrame.pack(fill = BOTH)
+
+	else:
+		window = Toplevel(root)
+		entryImporte1 = Entry(window)
+		buttonAceptar1 = Button(window, command=lambda: setearDefault(Entry.get(entryImporte1), mesString), text="Cargar")
+		buttonAceptar1.pack()
+		entryImporte1.pack()
+
+def setearDefault(importe, mesString):
+	MES = setDineroDiarioDefault(int(importe), getDiasMes(mesString))
 	monthFrame.pack(fill = BOTH)
-	printCalendar(gridFrame,MES)
+	printCalendar(gridFrame, MES)
 
 def Volver():
 	monthFrame.pack_forget()
@@ -102,6 +117,8 @@ entryImporte.pack(side = LEFT)
 buttonAceptar.pack(side = LEFT, padx=(10, 0))
 buttonCancelar.pack(side = LEFT, padx=(5, 0))
 buttonVolver.pack(side = LEFT, padx=(5, 0))
+
+
 
 
 
