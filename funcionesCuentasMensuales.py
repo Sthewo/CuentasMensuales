@@ -1,9 +1,6 @@
 import os
 from tkinter import *
 
-root = Tk()
-root.geometry("500x500")
-
 """
 	Esta clase sirve para guardar el importe de un dia concreto dentro del mesArray,
 	donde indica el valor que dispones y si ese es por defecto o modicifaco manualmente
